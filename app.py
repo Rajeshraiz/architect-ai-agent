@@ -8,6 +8,15 @@ from agents.scope_guard import ScopeGuard
 from agents.policy_engine import PolicyEngine
 from memory.persistent import PersistentMemory
 
+import streamlit as st
+
+# --- TEMPORARY DEBUG - remove after fixing ---
+st.write("API KEY EXISTS:", bool(st.secrets.get("ANTHROPIC_API_KEY")))
+st.write("SUPABASE URL EXISTS:", bool(st.secrets.get("SUPABASE_URL")))
+st.write("SUPABASE KEY EXISTS:", bool(st.secrets.get("SUPABASE_KEY")))
+# --- END DEBUG ---
+
+
 # ─── Page config ────────────────────────────────────────────────
 st.set_page_config(
     page_title="ARIA Agent",
