@@ -2,6 +2,7 @@
 import os
 from supabase import create_client
 from dotenv import load_dotenv
+import streamlit as st
 
 load_dotenv()
 
@@ -9,9 +10,14 @@ load_dotenv()
 class PersistentMemory:
     def __init__(self, session_id):
         self.session_id = session_id
+        def get_secret(key):
+            try:
+                return st.secrets[key]
+            except Exception:
+                return os.getenv(key)
         self.client = create_client(
-            os.getenv("SUPABASE_URL"),
-            os.getenv("SUPABASE_KEY")
+            get_secret("SUPABASE_URL"),
+            get_secret("SUPABASE_KEY")
         )
 
     def save_message(self, role, content, mode="ARCHITECT"):

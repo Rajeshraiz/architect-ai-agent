@@ -5,10 +5,17 @@ from dotenv import load_dotenv
 from agents.modes import MODES
 from prompts.master_prompt import MASTER_PROMPT
 from memory.conversation import ConversationMemory
+import streamlit as st
 
 load_dotenv()
-client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
+def get_api_key():
+    try:
+        return st.secrets["ANTHROPIC_API_KEY"]
+    except Exception:
+        return os.getenv("ANTHROPIC_API_KEY")
+
+client = anthropic.Anthropic(api_key=get_api_key())
 
 class ArchitectAgent:
     def __init__(self):
