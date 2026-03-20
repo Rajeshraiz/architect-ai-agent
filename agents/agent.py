@@ -5,22 +5,30 @@ from dotenv import load_dotenv
 from agents.modes import MODES
 from prompts.master_prompt import MASTER_PROMPT
 from memory.conversation import ConversationMemory
-import streamlit as st
 
 load_dotenv()
 
-def get_api_key():
-    try:
-        return st.secrets["ANTHROPIC_API_KEY"]
-    except Exception:
-        return os.getenv("ANTHROPIC_API_KEY")
 
-client = anthropic.Anthropic(api_key=get_api_key())
+def get_secret(key):
+    """Read from Streamlit secrets first, fall back to .env"""
+    try:
+        import streamlit as st
+        val = st.secrets.get(key)
+        if val:
+            return val
+    except Exception:
+        pass
+    return os.getenv(key)
+
 
 class ArchitectAgent:
     def __init__(self):
         self.memory = ConversationMemory()
         self.current_mode = "ARCHITECT"
+        # Client created inside __init__ so Streamlit secrets are ready
+        self.client = anthropic.Anthropic(
+            api_key=get_secret("ANTHROPIC_API_KEY")
+        )
 
     def set_mode(self, mode):
         mode = mode.upper()
@@ -41,7 +49,7 @@ class ArchitectAgent:
     def chat(self, user_message):
         self.memory.add_message("user", user_message)
 
-        response = client.messages.create(
+        response = self.client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=4000,
             system=self.build_system_prompt(),
