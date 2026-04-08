@@ -7,12 +7,12 @@ import os
 import hmac
 import hashlib
 from fastapi import FastAPI, Request, HTTPException
-from supabase import create_client
 
 app = FastAPI(title="ARIA Webhook Server")
 
 # ─── Supabase client ────────────────────────────────────────────
 def get_supabase():
+    from supabase import create_client
     url = os.getenv("SUPABASE_URL")
     key = os.getenv("SUPABASE_KEY")
     if not url or not key:

@@ -44,3 +44,5 @@ RULES - NEVER BREAK THESE:
 6. If a request is ambiguous, ask ONE targeted question before proceeding
 7. Never over-engineer — build only what was asked for
 """
+from prompts.tone_rules import TONE_RULES
+MASTER_PROMPT = MASTER_PROMPT + TONE_RULES
